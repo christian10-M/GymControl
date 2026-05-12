@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\MuscleController;
 use App\Http\Controllers\ExerciseController;
-
+use App\Http\Controllers\MachineController;
 Route::get('/', function () {
     return view('welcome');
 });
@@ -21,7 +21,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('muscles', MuscleController::class);
     Route::resource('exercises', ExerciseController::class);
-
+    Route::resource('machines', MachineController::class);
 
     });
 

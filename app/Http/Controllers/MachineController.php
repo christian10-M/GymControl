@@ -2,63 +2,54 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Machine;
+use App\Models\Muscle;
+use App\Http\Requests\StoreMachineRequest;
+use App\Http\Requests\UpdateMachineRequest;
 
 class MachineController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $machines = Machine::with('muscle')->paginate(10);
+        return view('machines.index', compact('machines'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $muscles = Muscle::orderBy('name')->get();
+        return view('machines.create', compact('muscles'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(StoreMachineRequest $request)
     {
-        //
+        Machine::create($request->validated());
+        return redirect()->route('machines.index')
+                         ->with('success', 'Máquina creada correctamente.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(Machine $machine)
     {
-        //
+        return view('machines.show', compact('machine'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(Machine $machine)
     {
-        //
+        $muscles = Muscle::orderBy('name')->get();
+        return view('machines.edit', compact('machine', 'muscles'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(UpdateMachineRequest $request, Machine $machine)
     {
-        //
+        $machine->update($request->validated());
+        return redirect()->route('machines.index')
+                         ->with('success', 'Máquina actualizada correctamente.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Machine $machine)
     {
-        //
+        $machine->delete();
+        return redirect()->route('machines.index')
+                         ->with('success', 'Máquina eliminada.');
     }
 }
