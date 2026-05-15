@@ -32,10 +32,19 @@
             >
             <button type="submit"
                     class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold
-                           py-3 rounded-lg transition">
+                           py-3 rounded-lg transition mb-4">
                 Entrar
             </button>
         </form>
+
+        <div class="border-t border-gray-700 pt-4">
+            <p class="text-gray-500 text-sm mb-3">¿Eres nuevo en el gym?</p>
+            <a href="{{ route('register') }}"
+               class="w-full inline-block bg-gray-700 hover:bg-gray-600 text-white
+                      font-semibold py-3 rounded-lg transition text-sm">
+                Registrarse
+            </a>
+        </div>
 
     </div>
 

@@ -8,6 +8,9 @@ use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\MachineController;
 use App\Http\Controllers\AccessController;
 use App\Http\Controllers\RoutineController;
+use App\Http\Controllers\DashboardController;
+
+
 Route::get('/', function () {
     return redirect()->route('access');
 });

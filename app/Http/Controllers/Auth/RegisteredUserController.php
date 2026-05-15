@@ -29,23 +29,32 @@ class RegisteredUserController extends Controller
      * @throws ValidationException
      */
     public function store(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+{
+    $request->validate([
+        'name'       => ['required', 'string', 'max:255'],
+        'email'      => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+        'curp'       => ['required', 'string', 'size:18', 'unique:users'],
+        'access_key' => ['required', 'string', 'max:20', 'unique:users'],
+        'age'        => ['required', 'integer', 'min:14', 'max:99'],
+        'gender'     => ['required', 'in:male,female,other'],
+        'password'   => ['required', 'confirmed', Rules\Password::defaults()],
+    ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+    $user = User::create([
+        'name'       => $request->name,
+        'email'      => $request->email,
+        'curp'       => strtoupper($request->curp),
+        'access_key' => strtoupper($request->access_key),
+        'age'        => $request->age,
+        'gender'     => $request->gender,
+        'password'   => Hash::make($request->password),
+        'role'       => 'user', // siempre usuario normal al registrarse
+    ]);
 
-        event(new Registered($user));
+    event(new Registered($user));
 
-        Auth::login($user);
+    Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
-    }
+    return redirect(route('user.dashboard'));
+}
 }

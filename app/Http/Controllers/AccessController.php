@@ -17,29 +17,40 @@ class AccessController extends Controller
 
     // Procesa el token
     public function processAccess(Request $request)
-    {
-        $request->validate([
-            'access_key' => 'required|string',
-        ]);
+{
+    $request->validate([
+        'access_key' => 'required|string',
+    ]);
 
-        $user = User::where('access_key', $request->access_key)->first();
+    $user = User::where('access_key', $request->access_key)->first();
 
-        if (!$user) {
-            return back()->withErrors(['access_key' => 'Clave no encontrada.']);
-        }
-
-        // Si es admin, manda a pantalla de contraseña
-        if ($user->role === 'admin') {
-            session(['admin_access_key' => $user->access_key]);
-            return redirect()->route('access.admin');
-        }
-
-        // Si es usuario normal, loguea directo y registra asistencia
-        Auth::login($user);
-        $this->registerAttendance($user);
-
-        return redirect()->route('user.dashboard');
+    if (!$user) {
+        return back()->withErrors(['access_key' => 'Clave no encontrada.']);
     }
+
+    if ($user->role === 'admin') {
+        session(['admin_access_key' => $user->access_key]);
+        return redirect()->route('access.admin');
+    }
+
+    Auth::login($user);
+
+$today = now()->toDateString();
+
+$existe = Attendance::where('user_id', $user->id)
+                    ->whereDate('date', $today)
+                    ->exists();
+
+if (!$existe) {
+    Attendance::create([
+        'user_id' => $user->id,
+        'date'    => $today,
+        'time'    => now()->toTimeString(),
+    ]);
+}
+
+return redirect()->route('user.dashboard');
+}
 
     // Pantalla 2 (solo admin): pide contraseña
     public function showAdminForm()
@@ -69,21 +80,4 @@ class AccessController extends Controller
         return redirect()->route('admin.dashboard');
     }
 
-    // Registra asistencia solo una vez por día
-    private function registerAttendance(User $user)
-    {
-        $today = now()->toDateString();
-
-        $alreadyIn = Attendance::where('user_id', $user->id)
-                                ->where('date', $today)
-                                ->exists();
-
-        if (!$alreadyIn) {
-            Attendance::create([
-                'user_id' => $user->id,
-                'date'    => $today,
-                'time'    => now()->toTimeString(),
-            ]);
-        }
-    }
 }

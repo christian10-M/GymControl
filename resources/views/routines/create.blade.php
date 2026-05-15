@@ -18,9 +18,7 @@
                        class="w-full border rounded p-2">
             </div>
 
-            <div id="exercises-container">
-                <!-- Los ejercicios se agregan aquí dinámicamente -->
-            </div>
+            <div id="exercises-container"></div>
 
             <button type="button" onclick="addExercise()"
                     class="w-full border-2 border-dashed border-gray-300 text-gray-500
@@ -31,6 +29,15 @@
             @error('exercises')
                 <p class="text-red-500 text-sm mb-3">{{ $message }}</p>
             @enderror
+            @if($errors->any())
+    <div class="mb-4 p-3 bg-red-100 text-red-700 rounded text-sm">
+        <ul>
+            @foreach($errors->all() as $error)
+                <li>• {{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
             <button type="submit"
                     class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 font-semibold">
@@ -39,14 +46,16 @@
         </form>
     </div>
 
-    {{-- Datos de ejercicios para JS --}}
-    <script>
-        const availableExercises = @json($exercises->map(fn($e) => [
+    @php
+        $exerciseData = $exercises->map(fn($e) => [
             'id'     => $e->id,
             'name'   => $e->name,
-            'muscle' => $e->muscle->name,
-        ]));
+            'muscle' => $e->muscle?->name ?? 'Sin músculo',
+        ])->values();
+    @endphp
 
+    <script>
+        const availableExercises = @json($exerciseData);
         let count = 0;
 
         function addExercise() {
@@ -99,7 +108,6 @@
             document.getElementById(`ex-${idx}`).remove();
         }
 
-        // Agrega uno de inicio para que no quede vacío
         addExercise();
     </script>
 </x-app-layout>
