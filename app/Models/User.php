@@ -46,4 +46,8 @@ class User extends Authenticatable
                     ->where('status', 'active')
                     ->latest();
     }
+
+    public function routines() {
+    return $this->hasMany(Routine::class);
+    }
 }

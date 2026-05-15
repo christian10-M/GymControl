@@ -7,7 +7,7 @@ use App\Http\Controllers\MuscleController;
 use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\MachineController;
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('access');
 });
 
 Route::get('/dashboard', function () {
@@ -24,5 +24,17 @@ Route::middleware('auth')->group(function () {
     Route::resource('machines', MachineController::class);
 
     });
+
+    // Rutas de acceso (sin auth)
+Route::get('/',              [AccessController::class, 'showAccessForm'])->name('access');
+Route::post('/access',       [AccessController::class, 'processAccess'])->name('access.post');
+Route::get('/admin/login',   [AccessController::class, 'showAdminForm'])->name('access.admin');
+Route::post('/admin/login',  [AccessController::class, 'processAdmin'])->name('access.admin.post');
+
+// Logout
+Route::post('/logout', function () {
+    Auth::logout();
+    return redirect()->route('access');
+})->name('logout')->middleware('auth');
 
 require __DIR__.'/auth.php';
