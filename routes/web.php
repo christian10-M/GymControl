@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MuscleController;
 use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\MachineController;
+use App\Http\Controllers\AccessController;
+use App\Http\Controllers\RoutineController;
 Route::get('/', function () {
     return redirect()->route('access');
 });
@@ -22,6 +24,13 @@ Route::middleware('auth')->group(function () {
     Route::resource('muscles', MuscleController::class);
     Route::resource('exercises', ExerciseController::class);
     Route::resource('machines', MachineController::class);
+
+    Route::get('/rutina/registrar',  [RoutineController::class, 'create'])->name('routines.create');
+    Route::post('/rutina/guardar',   [RoutineController::class, 'store'])->name('routines.store');
+    Route::get('/mis-rutinas',       [RoutineController::class, 'index'])->name('routines.index');
+    
+    Route::get('/dashboard/usuario', [DashboardController::class, 'user'])->name('user.dashboard');
+    Route::get('/dashboard/admin',   [DashboardController::class, 'admin'])->name('admin.dashboard');
 
     });
 
