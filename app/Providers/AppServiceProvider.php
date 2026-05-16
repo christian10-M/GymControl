@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Auth;
+use Laravel\Fortify\Contracts\LoginResponse;
 
 class AppServiceProvider extends ServiceProvider
 {

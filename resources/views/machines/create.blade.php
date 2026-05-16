@@ -59,7 +59,20 @@
                         <p class="text-red-400 text-sm mt-2">{{ $message }}</p>
                     @enderror
                 </div>
+                <div>
+    <label class="block text-sm font-medium text-gray-300 mb-2">
+        Imagen URL
+    </label>
 
+    <input
+        type="text"
+        name="image"
+        value="{{ old('image') }}"
+        placeholder="https://..."
+        class="w-full rounded-2xl border border-white/10
+               bg-white/5 text-white"
+    >
+</div>
                 {{-- STATUS --}}
                 <div>
                     <label class="block text-sm font-medium text-gray-300 mb-2">

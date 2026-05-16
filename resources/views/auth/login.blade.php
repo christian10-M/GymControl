@@ -1,47 +1,154 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+<!DOCTYPE html>
+<html lang="es" class="dark">
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+    <title>GymControl Pro</title>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
 
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-            </label>
-        </div>
+        .title-font {
+            font-family: 'Montserrat', sans-serif;
+        }
 
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
+        .bg-mesh {
+            background:
+                radial-gradient(circle at top left, rgba(16, 185, 129, 0.12), transparent 30%),
+                radial-gradient(circle at bottom right, rgba(59, 130, 246, 0.10), transparent 30%);
+        }
+
+        .glass {
+            background: rgba(255,255,255,0.04);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+    </style>
+</head>
+
+<body class="bg-[#0a0a0a] min-h-screen flex items-center justify-center overflow-hidden text-white">
+
+    {{-- FONDO --}}
+    <div class="fixed inset-0 bg-mesh"></div>
+
+    {{-- LOGIN --}}
+    <div class="relative z-10 w-full max-w-md px-4">
+
+        <div class="glass rounded-[32px] shadow-2xl p-8 md:p-10">
+
+            {{-- LOGO --}}
+            <div class="text-center mb-8">
+
+
+                <h1 class="title-font text-4xl font-black tracking-tight text-white">
+                    GymControl Pro
+                </h1>
+
+                <p class="text-gray-400 mt-2 text-sm">
+                    Ingresa tu clave de acceso
+                </p>
+
+            </div>
+
+            {{-- ERRORES --}}
+            @if($errors->any())
+
+                <div class="mb-6 rounded-2xl
+                            border border-red-500/20
+                            bg-red-500/10
+                            p-4 text-sm text-red-300">
+
+                    {{ $errors->first() }}
+
+                </div>
+
             @endif
 
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
+            {{-- FORM --}}
+            <form action="{{ route('login') }}" method="POST" class="space-y-6">
+
+                @csrf
+
+                {{-- ACCESS KEY --}}
+                <div>
+
+                    <label class="block text-sm font-medium text-gray-300 mb-2">
+                        Clave de acceso
+                    </label>
+
+                    <input
+                        type="text"
+                        name="access_key"
+                        placeholder="Ej: GYM001"
+                        autofocus
+
+                        class="w-full rounded-2xl
+                               border border-white/10
+                               bg-black/30
+                               px-4 py-4
+                               text-center text-xl tracking-[0.3em]
+                               text-white
+                               placeholder-gray-500
+                               focus:border-emerald-400
+                               focus:ring focus:ring-emerald-400/20
+                               focus:outline-none transition">
+
+                </div>
+
+                {{-- BUTTON --}}
+                <button
+                    type="submit"
+
+                    class="w-full rounded-2xl
+                           bg-emerald-500
+                           hover:bg-emerald-400
+                           py-4
+                           font-bold
+                           text-black
+                           transition
+                           hover:scale-[1.01]
+                           active:scale-[0.99]">
+
+                    Entrar
+
+                </button>
+
+            </form>
+
+            {{-- REGISTER --}}
+            <div class="mt-8 pt-6 border-t border-white/10 text-center">
+
+                <p class="text-sm text-gray-500 mb-4">
+                    ¿Eres nuevo en el gym?
+                </p>
+
+                <a href="{{ route('register') }}"
+                   class="w-full inline-flex items-center justify-center
+                          rounded-2xl
+                          border border-white/10
+                          bg-white/5
+                          hover:bg-white/10
+                          px-4 py-3
+                          text-sm font-semibold text-white
+                          transition">
+
+                    Registrarse
+
+                </a>
+
+            </div>
+
         </div>
-    </form>
-</x-guest-layout>
+
+    </div>
+
+</body>
+</html>

@@ -24,7 +24,13 @@
             'name' => 'Ejercicios',
             'route' => 'exercises.index',
             'icon' => 'exercise',
-            'roles' => ['admin', 'user']
+            'roles' => ['admin',]
+        ],
+        [
+            'name' => 'Biblioteca',
+            'route' => 'exercises.library',
+            'icon' => 'menu_book',
+            'roles' => ['user']
         ],
 
         [
@@ -66,14 +72,7 @@
     {{-- LOGO --}}
     <div class="flex items-center gap-3 px-6 py-8 border-b border-white/5">
 
-        <div
-            class="w-12 h-12 rounded-2xl
-            bg-[#aecdc5] text-[#183530]
-            flex items-center justify-center
-            font-bold text-xl shadow-lg"
-        >
-            🏋️
-        </div>
+        
 
         <div>
             <h1 class="text-white font-bold text-xl tracking-tight">
@@ -335,7 +334,7 @@
 
             </div>
 
-            <form method="POST" action="{{ route('logout') }}">
+            <form method="POST" action="{{ route('login') }}">
                 @csrf
 
                 <button

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Machine extends Model
 {
-    protected $fillable = ['name','description','status','muscle_id'];
+    protected $fillable = ['name','description','image','status','muscle_id'];
 
 public function muscle() {
     return $this->belongsTo(Muscle::class);

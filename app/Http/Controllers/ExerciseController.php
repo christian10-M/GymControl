@@ -45,7 +45,12 @@ class ExerciseController extends Controller
         return redirect()->route('exercises.index')
                          ->with('success', 'Ejercicio actualizado correctamente.');
     }
+    public function library()
+{
+    $exercises = Exercise::with('muscle')->paginate(12);
 
+    return view('exercises.library', compact('exercises'));
+}
     public function destroy(Exercise $exercise)
     {
         $exercise->delete();

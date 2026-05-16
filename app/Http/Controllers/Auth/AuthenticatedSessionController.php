@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+
+use App\Models\Attendance;
+
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,7 +15,7 @@ use Illuminate\View\View;
 class AuthenticatedSessionController extends Controller
 {
     /**
-     * Display the login view.
+     * Mostrar login
      */
     public function create(): View
     {
@@ -20,19 +23,55 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
-     * Handle an incoming authentication request.
+     * Procesar login
      */
-    public function store(LoginRequest $request): RedirectResponse
-    {
-        $request->authenticate();
+public function store(LoginRequest $request): RedirectResponse
+{
+    $request->authenticate();
 
-        $request->session()->regenerate();
+    /*
+    |--------------------------------------------------------------------------
+    | Si es ADMIN → mandar a contraseña
+    |--------------------------------------------------------------------------
+    */
 
-        return redirect()->intended(route('dashboard', absolute: false));
+    if (session('admin_access_key')) {
+
+        return redirect()->route('access.admin');
+
     }
 
+    $request->session()->regenerate();
+
+    $user = Auth::user();
+
+    /*
+    |--------------------------------------------------------------------------
+    | Registrar asistencia
+    |--------------------------------------------------------------------------
+    */
+
+    $today = now()->toDateString();
+
+    $exists = Attendance::where('user_id', $user->id)
+        ->whereDate('date', $today)
+        ->exists();
+
+    if (!$exists) {
+
+        Attendance::create([
+            'user_id' => $user->id,
+            'date'    => $today,
+            'time'    => now()->format('H:i:s'),
+        ]);
+
+    }
+
+    return redirect()->route('user.dashboard');
+}
+
     /**
-     * Destroy an authenticated session.
+     * Logout
      */
     public function destroy(Request $request): RedirectResponse
     {

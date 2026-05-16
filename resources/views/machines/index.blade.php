@@ -26,15 +26,20 @@
                 </p>
             </div>
 
-            <a
-                href="{{ route('machines.create') }}"
-                class="inline-flex items-center justify-center gap-2
-                       rounded-2xl bg-emerald-500 hover:bg-emerald-400
-                       px-5 py-3 text-black font-bold transition"
-            >
-                <span>+</span>
-                Nueva máquina
-            </a>
+            {{-- SOLO ADMIN --}}
+            @if(auth()->user()->role === 'admin')
+
+                <a
+                    href="{{ route('machines.create') }}"
+                    class="inline-flex items-center justify-center gap-2
+                           rounded-2xl bg-emerald-500 hover:bg-emerald-400
+                           px-5 py-3 text-black font-bold transition"
+                >
+                    <span>+</span>
+                    Nueva máquina
+                </a>
+
+            @endif
 
         </div>
 
@@ -53,7 +58,10 @@
                             <th class="px-6 py-4">Máquina</th>
                             <th class="px-6 py-4">Músculo</th>
                             <th class="px-6 py-4">Estado</th>
-                            <th class="px-6 py-4 text-right">Acciones</th>
+
+                            @if(auth()->user()->role === 'admin')
+                                <th class="px-6 py-4 text-right">Acciones</th>
+                            @endif
 
                         </tr>
 
@@ -65,11 +73,17 @@
 
                             <tr class="hover:bg-white/5 transition">
 
+                                {{-- MACHINE --}}
                                 <td class="px-6 py-5">
 
                                     <div class="flex items-center gap-4">
 
-                                        
+                                        <img
+                                            src="{{ $machine->image ?? 'https://placehold.co/200x200?text=Machine' }}"
+                                            alt="{{ $machine->name }}"
+                                            class="w-16 h-16 rounded-2xl object-cover border border-white/10"
+                                            onerror="this.src='https://placehold.co/200x200?text=Machine'"
+                                        >
 
                                         <div>
 
@@ -87,10 +101,12 @@
 
                                 </td>
 
+                                {{-- MUSCLE --}}
                                 <td class="px-6 py-5 text-gray-300">
                                     {{ $machine->muscle->name }}
                                 </td>
 
+                                {{-- STATUS --}}
                                 <td class="px-6 py-5">
 
                                     @php
@@ -110,38 +126,43 @@
 
                                 </td>
 
-                                <td class="px-6 py-5">
+                                {{-- ACTIONS SOLO ADMIN --}}
+                                @if(auth()->user()->role === 'admin')
 
-                                    <div class="flex justify-end gap-3">
+                                    <td class="px-6 py-5">
 
-                                        <a
-                                            href="{{ route('machines.edit', $machine) }}"
-                                            class="px-4 py-2 rounded-xl bg-cyan-500/10
-                                                   text-cyan-300 hover:bg-cyan-500/20 transition"
-                                        >
-                                            Editar
-                                        </a>
+                                        <div class="flex justify-end gap-3">
 
-                                        <form
-                                            action="{{ route('machines.destroy', $machine) }}"
-                                            method="POST"
-                                            onsubmit="return confirm('¿Eliminar esta máquina?')"
-                                        >
-                                            @csrf
-                                            @method('DELETE')
-
-                                            <button
-                                                class="px-4 py-2 rounded-xl bg-red-500/10
-                                                       text-red-300 hover:bg-red-500/20 transition"
+                                            <a
+                                                href="{{ route('machines.edit', $machine) }}"
+                                                class="px-4 py-2 rounded-xl bg-cyan-500/10
+                                                       text-cyan-300 hover:bg-cyan-500/20 transition"
                                             >
-                                                Eliminar
-                                            </button>
+                                                Editar
+                                            </a>
 
-                                        </form>
+                                            <form
+                                                action="{{ route('machines.destroy', $machine) }}"
+                                                method="POST"
+                                                onsubmit="return confirm('¿Eliminar esta máquina?')"
+                                            >
+                                                @csrf
+                                                @method('DELETE')
 
-                                    </div>
+                                                <button
+                                                    class="px-4 py-2 rounded-xl bg-red-500/10
+                                                           text-red-300 hover:bg-red-500/20 transition"
+                                                >
+                                                    Eliminar
+                                                </button>
 
-                                </td>
+                                            </form>
+
+                                        </div>
+
+                                    </td>
+
+                                @endif
 
                             </tr>
 
@@ -159,6 +180,14 @@
                 @foreach($machines as $machine)
 
                     <div class="p-5 space-y-4">
+
+                        {{-- IMAGE --}}
+                        <img
+                            src="{{ $machine->image ?? 'https://placehold.co/600x400?text=Machine' }}"
+                            alt="{{ $machine->name }}"
+                            class="w-full h-48 object-cover rounded-2xl"
+                            onerror="this.src='https://placehold.co/600x400?text=Machine'"
+                        >
 
                         <div class="flex items-start justify-between gap-4">
 
@@ -180,34 +209,39 @@
 
                         </div>
 
-                        <div class="flex gap-3">
+                        {{-- ACTIONS SOLO ADMIN --}}
+                        @if(auth()->user()->role === 'admin')
 
-                            <a
-                                href="{{ route('machines.edit', $machine) }}"
-                                class="flex-1 text-center rounded-xl bg-cyan-500/10
-                                       text-cyan-300 py-2"
-                            >
-                                Editar
-                            </a>
+                            <div class="flex gap-3">
 
-                            <form
-                                action="{{ route('machines.destroy', $machine) }}"
-                                method="POST"
-                                class="flex-1"
-                            >
-                                @csrf
-                                @method('DELETE')
-
-                                <button
-                                    class="w-full rounded-xl bg-red-500/10
-                                           text-red-300 py-2"
+                                <a
+                                    href="{{ route('machines.edit', $machine) }}"
+                                    class="flex-1 text-center rounded-xl bg-cyan-500/10
+                                           text-cyan-300 py-2"
                                 >
-                                    Eliminar
-                                </button>
+                                    Editar
+                                </a>
 
-                            </form>
+                                <form
+                                    action="{{ route('machines.destroy', $machine) }}"
+                                    method="POST"
+                                    class="flex-1"
+                                >
+                                    @csrf
+                                    @method('DELETE')
 
-                        </div>
+                                    <button
+                                        class="w-full rounded-xl bg-red-500/10
+                                               text-red-300 py-2"
+                                    >
+                                        Eliminar
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        @endif
 
                     </div>
 
