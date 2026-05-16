@@ -44,12 +44,30 @@ class DashboardController extends Controller
         ));
     }
 
-    public function admin()
-    {
-        // Esto lo ampliarás después con charts
-        $totalUsers       = \App\Models\User::where('role', 'user')->count();
-        $attendancesToday = Attendance::whereDate('date', now())->count();
+public function admin()
+{
+    $totalUsers = \App\Models\User::where('role', 'user')->count();
 
-        return view('dashboard.admin', compact('totalUsers', 'attendancesToday'));
-    }
+    $attendancesToday = Attendance::whereDate('date', now())->count();
+
+    $totalExercises = \App\Models\Exercise::count();
+
+    $totalMuscles = \App\Models\Muscle::count();
+
+    $totalMachines = \App\Models\Machine::count();
+
+    $latestExercises = \App\Models\Exercise::with('muscle')
+        ->latest()
+        ->take(5)
+        ->get();
+
+    return view('dashboard.admin', compact(
+        'totalUsers',
+        'attendancesToday',
+        'totalExercises',
+        'totalMuscles',
+        'totalMachines',
+        'latestExercises'
+    ));
+}
 }

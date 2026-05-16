@@ -1,61 +1,121 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="text-xl font-semibold">Editar máquina</h2>
-    </x-slot>
+<x-app-layout
+    pageTitle="Editar Máquina"
+    pageSubtitle="Modificar equipamiento"
+>
+    <div class="max-w-3xl mx-auto">
 
-    <div class="py-6 max-w-lg mx-auto bg-white shadow rounded p-6">
+        <div class="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 md:p-8">
 
-        <form action="{{ route('machines.update', $machine) }}" method="POST">
-            @csrf
             @method('PUT')
 
-            <div class="mb-4">
-                <label class="block text-sm font-medium mb-1">Nombre</label>
-                <input type="text" name="name" value="{{ old('name', $machine->name) }}"
-                       class="w-full border rounded p-2 @error('name') border-red-500 @enderror">
-                @error('name')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                @enderror
-            </div>
+                {{-- NOMBRE --}}
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">
+                        Nombre
+                    </label>
 
-            <div class="mb-4">
-                <label class="block text-sm font-medium mb-1">Músculo</label>
-                <select name="muscle_id" class="w-full border rounded p-2">
-                    <option value="">— Selecciona —</option>
-                    @foreach($muscles as $muscle)
-                        <option value="{{ $muscle->id }}"
-                            {{ old('muscle_id', $machine->muscle_id) == $muscle->id ? 'selected' : '' }}>
-                            {{ $muscle->name }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
+                    <input
+                        type="text"
+                        name="name"
+                        value="{{ old('name') }}"
+                        placeholder="Ej. Press Inclinado Hammer"
+                        class="w-full rounded-2xl border border-white/10 bg-black/20
+                               px-4 py-3 text-white placeholder-gray-500
+                               focus:border-emerald-400 focus:ring-0
+                               @error('name') border-red-500 @enderror"
+                    >
 
-            <div class="mb-4">
-                <label class="block text-sm font-medium mb-1">Estado</label>
-                <select name="status" class="w-full border rounded p-2">
-                    <option value="available"      {{ old('status', $machine->status) == 'available'      ? 'selected' : '' }}>Disponible</option>
-                    <option value="maintenance"    {{ old('status', $machine->status) == 'maintenance'    ? 'selected' : '' }}>Mantenimiento</option>
-                    <option value="out_of_service" {{ old('status', $machine->status) == 'out_of_service' ? 'selected' : '' }}>Fuera de servicio</option>
-                </select>
-            </div>
+                    @error('name')
+                        <p class="text-red-400 text-sm mt-2">{{ $message }}</p>
+                    @enderror
+                </div>
 
-            <div class="mb-4">
-                <label class="block text-sm font-medium mb-1">Descripción</label>
-                <textarea name="description" rows="3"
-                          class="w-full border rounded p-2">{{ old('description', $machine->description) }}</textarea>
-            </div>
+                {{-- MUSCULO --}}
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">
+                        Músculo principal
+                    </label>
 
-            <div class="flex gap-3">
-                <button type="submit"
-                        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-                    Actualizar
-                </button>
-                <a href="{{ route('machines.index') }}"
-                   class="px-4 py-2 border rounded hover:bg-gray-100">
-                    Cancelar
-                </a>
-            </div>
-        </form>
+                    <select
+                        name="muscle_id"
+                        class="w-full rounded-2xl border border-white/10 bg-black/20
+                               px-4 py-3 text-white focus:border-emerald-400 focus:ring-0"
+                    >
+                        <option value="">Selecciona un músculo</option>
+
+                        @foreach($muscles as $muscle)
+                            <option
+                                value="{{ $muscle->id }}"
+                                {{ old('muscle_id') == $muscle->id ? 'selected' : '' }}
+                            >
+                                {{ $muscle->name }}
+                            </option>
+                        @endforeach
+                    </select>
+
+                    @error('muscle_id')
+                        <p class="text-red-400 text-sm mt-2">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                {{-- STATUS --}}
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">
+                        Estado
+                    </label>
+
+                    <select
+                        name="status"
+                        class="w-full rounded-2xl border border-white/10 bg-black/20
+                               px-4 py-3 text-white focus:border-emerald-400 focus:ring-0"
+                    >
+                        <option value="available">Disponible</option>
+                        <option value="maintenance">Mantenimiento</option>
+                        <option value="out_of_service">Fuera de servicio</option>
+                    </select>
+                </div>
+
+                {{-- DESCRIPCION --}}
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">
+                        Descripción
+                    </label>
+
+                    <textarea
+                        name="description"
+                        rows="4"
+                        placeholder="Describe la máquina..."
+                        class="w-full rounded-2xl border border-white/10 bg-black/20
+                               px-4 py-3 text-white placeholder-gray-500
+                               focus:border-emerald-400 focus:ring-0"
+                    >{{ old('description') }}</textarea>
+                </div>
+
+                {{-- BUTTONS --}}
+                <div class="flex flex-col sm:flex-row gap-4 pt-4">
+
+                    <button
+                        type="submit"
+                        class="flex-1 rounded-2xl bg-emerald-500 hover:bg-emerald-400
+                               text-black font-bold py-3 transition"
+                    >
+                        Guardar Máquina
+                    </button>
+
+                    <a
+                        href="{{ route('machines.index') }}"
+                        class="flex-1 rounded-2xl border border-white/10 bg-white/5
+                               hover:bg-white/10 text-white py-3 text-center transition"
+                    >
+                        Cancelar
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
     </div>
+
 </x-app-layout>
