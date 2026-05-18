@@ -10,6 +10,9 @@ use App\Http\Controllers\MachineController;
 use App\Http\Controllers\RoutineController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AccessController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\MembershipController;
+use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -144,4 +147,45 @@ Route::middleware('auth')->group(function () {
 });
 Route::get('/catalogo-maquinas', [MachineController::class, 'userIndex'])
     ->name('machines.userIndex');
+
+    Route::middleware(['auth'])->group(function () {
+
+    /*
+    |--------------------------------------------------------------------------
+    | ADMIN
+    |--------------------------------------------------------------------------
+    */
+
+
+        // Usuarios
+        Route::resource('users', UserController::class);
+
+        // Membresías
+        Route::resource('memberships', MembershipController::class);
+
+        // Reportes
+        Route::get('/reports', [ReportController::class, 'index'])
+            ->name('reports.index');
+
+        Route::get('/reports/users', [ReportController::class, 'users'])
+            ->name('reports.users');
+
+        Route::get('/reports/memberships', [ReportController::class, 'memberships'])
+            ->name('reports.memberships');
+
+    Route::get('/users/create', [UserController::class, 'create'])
+        ->name('users.create');
+
+    Route::post('/users', [UserController::class, 'store'])
+        ->name('users.store');
+    });
+
+    Route::get('/users/create', [UserController::class, 'create'])
+        ->name('users.create');
+
+    Route::post('/users', [UserController::class, 'store'])
+        ->name('users.store');
+    
+
+
 require __DIR__.'/auth.php';

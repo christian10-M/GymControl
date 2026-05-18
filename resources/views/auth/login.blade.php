@@ -130,18 +130,6 @@
                     ¿Eres nuevo en el gym?
                 </p>
 
-                <a href="{{ route('register') }}"
-                   class="w-full inline-flex items-center justify-center
-                          rounded-2xl
-                          border border-white/10
-                          bg-white/5
-                          hover:bg-white/10
-                          px-4 py-3
-                          text-sm font-semibold text-white
-                          transition">
-
-                    Registrarse
-
                 </a>
 
             </div>

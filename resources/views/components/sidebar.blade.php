@@ -6,12 +6,58 @@
 
     $navigation = [
 
+        /*
+        |--------------------------------------------------------------------------
+        | DASHBOARD
+        |--------------------------------------------------------------------------
+        */
+
         [
             'name' => 'Dashboard',
             'route' => $isAdmin ? 'admin.dashboard' : 'user.dashboard',
             'icon' => 'dashboard',
             'roles' => ['admin', 'user']
         ],
+
+        /*
+        |--------------------------------------------------------------------------
+        | ADMIN
+        |--------------------------------------------------------------------------
+        */
+
+        [
+            'name' => 'Usuarios',
+            'route' => 'users.index',
+            'icon' => 'group',
+            'roles' => ['admin']
+        ],
+
+        [
+            'name' => 'Nuevo Miembro',
+            'route' => 'users.create',
+            'icon' => 'person_add',
+            'roles' => ['admin']
+        ],
+
+        [
+            'name' => 'Membresías',
+            'route' => 'memberships.index',
+            'icon' => 'workspace_premium',
+            'roles' => ['admin']
+        ],
+
+        [
+            'name' => 'Reportes',
+            'route' => 'reports.index',
+            'icon' => 'analytics',
+            'roles' => ['admin']
+        ],
+
+        /*
+        |--------------------------------------------------------------------------
+        | GYM DATA
+        |--------------------------------------------------------------------------
+        */
 
         [
             'name' => 'Músculos',
@@ -24,13 +70,7 @@
             'name' => 'Ejercicios',
             'route' => 'exercises.index',
             'icon' => 'exercise',
-            'roles' => ['admin',]
-        ],
-        [
-            'name' => 'Biblioteca',
-            'route' => 'exercises.library',
-            'icon' => 'menu_book',
-            'roles' => ['user']
+            'roles' => ['admin']
         ],
 
         [
@@ -38,6 +78,19 @@
             'route' => 'machines.index',
             'icon' => 'precision_manufacturing',
             'roles' => ['admin']
+        ],
+
+        /*
+        |--------------------------------------------------------------------------
+        | USER
+        |--------------------------------------------------------------------------
+        */
+
+        [
+            'name' => 'Biblioteca',
+            'route' => 'exercises.library',
+            'icon' => 'menu_book',
+            'roles' => ['user']
         ],
 
         [
@@ -65,23 +118,33 @@
 
 {{-- DESKTOP SIDEBAR --}}
 <aside
-    class="hidden md:flex flex-col fixed top-0 left-0 h-screen w-[280px]
-    bg-[#1e201f]/95 backdrop-blur-2xl border-r border-white/5 shadow-2xl z-50"
+    class="hidden md:flex flex-col fixed top-0 left-0 h-screen w-[290px]
+    bg-[#1a1c1b]/95 backdrop-blur-2xl border-r border-white/5
+    shadow-2xl z-50"
 >
 
     {{-- LOGO --}}
-    <div class="flex items-center gap-3 px-6 py-8 border-b border-white/5">
+    <div class="flex items-center gap-4 px-6 py-8 border-b border-white/5">
 
-        
+        <div
+            class="w-14 h-14 rounded-2xl
+            bg-[#aecdc5] text-[#183530]
+            flex items-center justify-center
+            font-bold text-2xl shadow-lg"
+        >
+            🏋️
+        </div>
 
         <div>
+
             <h1 class="text-white font-bold text-xl tracking-tight">
                 GymControl
             </h1>
 
-            <p class="text-[#8b9290] text-xs uppercase tracking-[0.2em]">
+            <p class="text-[#8b9290] text-xs uppercase tracking-[0.25em]">
                 Pro
             </p>
+
         </div>
 
     </div>
@@ -96,7 +159,7 @@
                 <a
                     href="{{ route($item['route']) }}"
                     class="
-                        flex items-center gap-4
+                        group flex items-center gap-4
                         px-4 py-3 rounded-2xl
                         transition-all duration-200
 
@@ -219,8 +282,8 @@
         x-transition:leave-end="-translate-x-full"
         class="
             fixed top-0 left-0 z-50
-            h-screen w-[280px]
-            bg-[#1e201f]/95 backdrop-blur-2xl
+            h-screen w-[290px]
+            bg-[#1a1c1b]/95 backdrop-blur-2xl
             border-r border-white/5
             shadow-2xl flex flex-col
         "
@@ -334,7 +397,8 @@
 
             </div>
 
-            <form method="POST" action="{{ route('login') }}">
+            {{-- LOGOUT --}}
+            <form method="POST" action="{{ route('logout') }}">
                 @csrf
 
                 <button
