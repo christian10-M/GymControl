@@ -104,12 +104,12 @@
                                 </td>
 
                                 <td class="px-6 py-5 text-gray-300">
-                                    {{ $user->membership?->type ?? 'Sin membresía' }}
+                                    {{ $user->activeMembership?->type ?? 'Sin membresía' }}
                                 </td>
 
                                 <td class="px-6 py-5">
 
-                                    @if($user->membership)
+                                    @if($user->activeMembership)
 
                                         <span class="px-3 py-1 rounded-full text-xs
                                                      bg-emerald-500/15 text-emerald-300">

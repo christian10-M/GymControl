@@ -106,6 +106,12 @@
             'icon' => 'list_alt',
             'roles' => ['user']
         ],
+        [
+            'name' => 'Mi Perfil',
+            'route' => 'profile.edit',
+            'icon' => 'account_circle',
+            'roles' => ['admin', 'user']
+        ],
 
     ];
 @endphp
@@ -126,14 +132,6 @@
     {{-- LOGO --}}
     <div class="flex items-center gap-4 px-6 py-8 border-b border-white/5">
 
-        <div
-            class="w-14 h-14 rounded-2xl
-            bg-[#aecdc5] text-[#183530]
-            flex items-center justify-center
-            font-bold text-2xl shadow-lg"
-        >
-            🏋️
-        </div>
 
         <div>
 
