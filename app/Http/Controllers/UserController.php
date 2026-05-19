@@ -7,6 +7,8 @@ use App\Models\Membership;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\WelcomeMember;
 
 class UserController extends Controller
 {
@@ -155,6 +157,16 @@ class UserController extends Controller
 
             ]);
         }
+
+        /*
+        |--------------------------------------------------------------------------
+        | ENVIAR CORREO DE BIENVENIDA
+        |--------------------------------------------------------------------------
+        */
+        
+        Mail::to($user->email)->send(
+            new WelcomeMember($user)
+        );
 
         return redirect()
             ->route('users.index')
